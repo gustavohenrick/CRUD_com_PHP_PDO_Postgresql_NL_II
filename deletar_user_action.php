@@ -1,17 +1,17 @@
 <?php
 
-include_once 'ConexaoDB.php';
+require 'ConexaoDB.php';
+require 'dao/UsuarioDaoPostgres.php';
+
+$usuarioDao = new UsuarioDaoPostgres($conn);
 
 
 $id = filter_input(INPUT_GET, 'id');
 
 if($id) {
 
-    $resultado_usuario = $conn->prepare("DELETE FROM tb_usuarios WHERE id = :id ");
-    $resultado_usuario->bindValue(':id', $id);
-    $resultado_usuario->execute();
+    $usuarioDao->delete($id);
 
-    
 }
 header("Location: index.php");
 exit;

@@ -1,28 +1,20 @@
 <?php
 
-include_once 'ConexaoDB.php';
+require 'ConexaoDB.php';
+require 'dao/UsuarioDaoPostgres.php';
 
-$info ='';
+$usuarioDao = new UsuarioDaoPostgres($conn);
+
+$usuario = false;
 
 $id = filter_input(INPUT_GET, 'id');
 
 if($id) {
+    $usuario = $usuarioDao->findById($id);
+}
 
-    $resultado_usuario = $conn->prepare("SELECT * FROM tb_usuarios WHERE id = :id");
-    $resultado_usuario->bindValue(':id', $id,  PDO::PARAM_INT);
-    $resultado_usuario->execute();
-
-    if($resultado_usuario->rowCount() > 0 ){
-
-        $info = $resultado_usuario->fetch( PDO::FETCH_ASSOC );
-
-    } else {
-        header("Location: index.php");
-        exit;  
-    }
-
-} else {
-    header("Location: cadastro.php");
+if($usuario === false){
+    header("Location: index.php");
     exit;
 }
 
@@ -31,16 +23,16 @@ if($id) {
 <h1>EDITAR USUÁRIOS</h1>
 
 <form method="POST" action="editar_action.php">
-    <input type="hidden" name="id" value="<?=$info['id'];?>" />
+    <input type="hidden" name="id" value="<?=$usuario->getId();?>" />
  
     <label>
         Nome:<br/>
-        <input type="text" name="name" value="<?=$info['nome'];?>" />
+        <input type="text" name="name" value="<?=$usuario->getNome();?>" />
     </label><br/><br/>
 
     <label>
         E-mail:<br/>
-        <input type="email" name="email" value="<?=$info['email'];?>" />
+        <input type="email" name="email" value="<?=$usuario->getEmail();?>" />
     </label><br/><br/>
 
     <input type="submit" value="Salvar" />
