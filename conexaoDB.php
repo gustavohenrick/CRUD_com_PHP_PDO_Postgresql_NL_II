@@ -3,8 +3,8 @@
 	$servidor = "localhost";
 	$porta = 5432;
 	$usuario = "postgres";
-	$senha = "Drive@3252";
-	$dbname = "cold_case";
+	$senha = "********";
+	$dbname = "Database";
 	
 	//Criar a conexao
 	 try{
